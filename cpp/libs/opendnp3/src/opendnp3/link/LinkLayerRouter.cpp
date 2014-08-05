@@ -254,8 +254,26 @@ void LinkLayerRouter::ConfirmedUserData(bool aIsMaster, bool aFcb, uint16_t aDes
 }
 void LinkLayerRouter::UnconfirmedUserData(bool aIsMaster, uint16_t aDest, uint16_t aSrc, const ReadOnlyBuffer& arBuffer)
 {
-	ILinkContext* pDest = GetDestination(aDest, aSrc);
-	if(pDest) pDest->UnconfirmedUserData(aIsMaster, aDest, aSrc, arBuffer);
+    auto sendOne = [&](ILinkContext* pDest, uint16_t aDest, uint16_t aSrc){ pDest->UnconfirmedUserData(aIsMaster, aDest, aSrc, arBuffer); };
+    auto sendAll = [&](Record rec){ if(!aIsMaster && rec.enabled) sendOne(rec.pContext, rec.route.remote, aSrc); };
+    switch (aDest) {
+        case 0xFFFD: // ALLCALL_DONT_CONFIRM
+            // TODO: Inform upper layer that IIN1.0 must be set for the next response only
+            records.Foreach(sendAll);
+            break;
+        case 0xFFFE: // ALLCALL_MUST_CONFIRM
+            // TODO: Inform upper layer that IIN1.0 must be set and only cleared after receving a master application layer confirmation
+            records.Foreach(sendAll);
+            break;
+        case 0xFFFF: // ALLCALL_OPTIONAL_CONFIRM
+            // TODO: Either of the above behaviour, perhaps dependant on if application confirm is enabled?
+            records.Foreach(sendAll);
+            break;
+        default:
+            ILinkContext* pDest = GetDestination(aDest, aSrc);
+            if(pDest) sendOne(pDest, aDest, aSrc);
+            break;
+    }
 }
 
 void LinkLayerRouter::OnReceive(const openpal::ReadOnlyBuffer& input)
