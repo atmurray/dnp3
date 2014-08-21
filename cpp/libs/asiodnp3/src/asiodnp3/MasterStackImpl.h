@@ -59,6 +59,8 @@ public:
 
 	virtual opendnp3::ICommandProcessor* GetCommandProcessor()  override final;
 
+	virtual opendnp3::IFunctionProcessor* GetFunctionProcessor()  override final;
+    
 	// ------- Scan handlers ---------
 
 	virtual opendnp3::MasterScan AddAllObjectsScan(opendnp3::GroupVariationID gvId, openpal::TimeDuration period) override final;

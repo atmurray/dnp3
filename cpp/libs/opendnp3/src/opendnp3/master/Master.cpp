@@ -40,7 +40,8 @@ Master::Master(
 	ITaskLock& taskLock
 	) : 
 	context(executor, root, lower, SOEHandler, application, params, taskLock),
-	commandMarshaller(executor, context)
+	commandMarshaller(executor, context),
+	functionMarshaller(executor, context)
 {}
 	
 void Master::OnLowerLayerUp()
@@ -68,6 +69,11 @@ ICommandProcessor& Master::GetCommandProcessor()
 	return commandMarshaller;
 }
 
+IFunctionProcessor& Master::GetFunctionProcessor()
+{
+    return functionMarshaller;
+}
+    
 MasterScan Master::AddScan(openpal::TimeDuration period, const openpal::Action1<APDURequest&> builder)
 {
 	PollTask task(builder, period, context.pSOEHandler, &context.logger);

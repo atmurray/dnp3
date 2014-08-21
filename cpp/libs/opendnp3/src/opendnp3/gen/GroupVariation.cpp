@@ -71,6 +71,8 @@ GroupVariation GroupVariationFromType(uint16_t arg)
       return GroupVariation::Group12Var0;
     case(0xC01):
       return GroupVariation::Group12Var1;
+    case(0xD00):
+      return GroupVariation::Group13Var0;
     case(0x1400):
       return GroupVariation::Group20Var0;
     case(0x1401):
@@ -129,6 +131,8 @@ GroupVariation GroupVariationFromType(uint16_t arg)
       return GroupVariation::Group30Var5;
     case(0x1E06):
       return GroupVariation::Group30Var6;
+    case(0x1F00):
+      return GroupVariation::Group31Var0;
     case(0x2000):
       return GroupVariation::Group32Var0;
     case(0x2001):
@@ -147,6 +151,8 @@ GroupVariation GroupVariationFromType(uint16_t arg)
       return GroupVariation::Group32Var7;
     case(0x2008):
       return GroupVariation::Group32Var8;
+    case(0x2100):
+      return GroupVariation::Group33Var0;
     case(0x2800):
       return GroupVariation::Group40Var0;
     case(0x2801):
@@ -185,6 +191,8 @@ GroupVariation GroupVariationFromType(uint16_t arg)
       return GroupVariation::Group42Var7;
     case(0x2A08):
       return GroupVariation::Group42Var8;
+    case(0x2B00):
+      return GroupVariation::Group43Var0;
     case(0x3201):
       return GroupVariation::Group50Var1;
     case(0x3301):
@@ -203,12 +211,52 @@ GroupVariation GroupVariationFromType(uint16_t arg)
       return GroupVariation::Group60Var3;
     case(0x3C04):
       return GroupVariation::Group60Var4;
+    case(0x4600):
+      return GroupVariation::Group70Var0;
+    case(0x4601):
+      return GroupVariation::Group70Var1;
+    case(0x4602):
+      return GroupVariation::Group70Var2;
+    case(0x4603):
+      return GroupVariation::Group70Var3;
+    case(0x4604):
+      return GroupVariation::Group70Var4;
+    case(0x4605):
+      return GroupVariation::Group70Var5;
+    case(0x4606):
+      return GroupVariation::Group70Var6;
+    case(0x4607):
+      return GroupVariation::Group70Var7;
     case(0x5001):
       return GroupVariation::Group80Var1;
     case(0x6E00):
       return GroupVariation::Group110AnyVar;
     case(0x6F00):
       return GroupVariation::Group111AnyVar;
+    case(0x7000):
+      return GroupVariation::Group112Var0;
+    case(0x7001):
+      return GroupVariation::Group112Var1;
+    case(0x7002):
+      return GroupVariation::Group112Var2;
+    case(0x7003):
+      return GroupVariation::Group112Var3;
+    case(0x7004):
+      return GroupVariation::Group112Var4;
+    case(0x7005):
+      return GroupVariation::Group112Var5;
+    case(0x7006):
+      return GroupVariation::Group112Var6;
+    case(0x7007):
+      return GroupVariation::Group112Var7;
+    case(0x7100):
+      return GroupVariation::Group113Var0;
+    case(0x7101):
+      return GroupVariation::Group113Var1;
+    case(0x7102):
+      return GroupVariation::Group113Var2;
+    case(0x7103):
+      return GroupVariation::Group113Var3;
     case(0xFFFF):
       return GroupVariation::UNKNOWN;
   }
@@ -262,6 +310,8 @@ char const* GroupVariationToString(GroupVariation arg)
       return "Binary Command - Any Variation";
     case(GroupVariation::Group12Var1):
       return "Binary Command - CROB";
+    case(GroupVariation::Group13Var0):
+      return "Binary Command Event - Any Variation";
     case(GroupVariation::Group20Var0):
       return "Counter - Any Variation";
     case(GroupVariation::Group20Var1):
@@ -320,6 +370,8 @@ char const* GroupVariationToString(GroupVariation arg)
       return "Analog Input - Single-precision With Flag";
     case(GroupVariation::Group30Var6):
       return "Analog Input - Double-precision With Flag";
+    case(GroupVariation::Group31Var0):
+      return "Frozen Analog Input - Any Variation";
     case(GroupVariation::Group32Var0):
       return "Analog Input Event - Any Variation";
     case(GroupVariation::Group32Var1):
@@ -338,6 +390,8 @@ char const* GroupVariationToString(GroupVariation arg)
       return "Analog Input Event - Single-precision With Flag and Time";
     case(GroupVariation::Group32Var8):
       return "Analog Input Event - Double-precision With Flag abd Time";
+    case(GroupVariation::Group33Var0):
+      return "Frozen Analog Input Event - Any Variation";
     case(GroupVariation::Group40Var0):
       return "Analog Output Status - Any Variation";
     case(GroupVariation::Group40Var1):
@@ -376,6 +430,8 @@ char const* GroupVariationToString(GroupVariation arg)
       return "Analog Output Event - Single-precision With Flag and Time";
     case(GroupVariation::Group42Var8):
       return "Analog Output Event - Double-precision With Flag abd Time";
+    case(GroupVariation::Group43Var0):
+      return "Analog Output Event - Any Variation";
     case(GroupVariation::Group50Var1):
       return "Time and Date - Absolute Time";
     case(GroupVariation::Group51Var1):
@@ -394,12 +450,52 @@ char const* GroupVariationToString(GroupVariation arg)
       return "Class Data - Class 2 data";
     case(GroupVariation::Group60Var4):
       return "Class Data - Class 3 data";
+    case(GroupVariation::Group70Var0):
+      return "File";
+    case(GroupVariation::Group70Var1):
+      return "File - Identifier (superseded)";
+    case(GroupVariation::Group70Var2):
+      return "File - Authentication";
+    case(GroupVariation::Group70Var3):
+      return "File - Command";
+    case(GroupVariation::Group70Var4):
+      return "File - Command Status";
+    case(GroupVariation::Group70Var5):
+      return "File - Transfer";
+    case(GroupVariation::Group70Var6):
+      return "File - Transport Status";
+    case(GroupVariation::Group70Var7):
+      return "File - Descriptor";
     case(GroupVariation::Group80Var1):
       return "Internal Indications - Packed Format";
     case(GroupVariation::Group110AnyVar):
       return "Octet String";
     case(GroupVariation::Group111AnyVar):
       return "Octet String Event";
+    case(GroupVariation::Group112Var0):
+      return "Virtual Terminal";
+    case(GroupVariation::Group112Var1):
+      return "Virtual Terminal";
+    case(GroupVariation::Group112Var2):
+      return "Virtual Terminal";
+    case(GroupVariation::Group112Var3):
+      return "Virtual Terminal";
+    case(GroupVariation::Group112Var4):
+      return "Virtual Terminal";
+    case(GroupVariation::Group112Var5):
+      return "Virtual Terminal";
+    case(GroupVariation::Group112Var6):
+      return "Virtual Terminal";
+    case(GroupVariation::Group112Var7):
+      return "Virtual Terminal";
+    case(GroupVariation::Group113Var0):
+      return "Virtual Terminal";
+    case(GroupVariation::Group113Var1):
+      return "Virtual Terminal";
+    case(GroupVariation::Group113Var2):
+      return "Virtual Terminal";
+    case(GroupVariation::Group113Var3):
+      return "Virtual Terminal";
     case(GroupVariation::UNKNOWN):
       return "UNKNOWN";
   }

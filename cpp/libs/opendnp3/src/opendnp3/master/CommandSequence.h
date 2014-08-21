@@ -22,6 +22,7 @@
 #define __COMMAND_SEQUENCE_H_
 
 #include "opendnp3/app/APDUHandlerBase.h"
+#include "opendnp3/master/CommandResponse.h"
 
 #include <openpal/serialization/Serialization.h>
 

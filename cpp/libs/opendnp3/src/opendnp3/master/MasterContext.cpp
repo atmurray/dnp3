@@ -345,4 +345,27 @@ void MasterContext::DirectOperate(const AnalogOutputDouble64& command, uint16_t 
 	this->DirectOperateT(command, index, callback);
 }
 
+void MasterContext::AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz)
+{
+    if (isOnline)
+    {
+        auto pAssignClassTask = &staticTasks.assignClassTask;
+        
+        auto userTask = [gvId, points, clazz, pAssignClassTask]()
+        {
+            pAssignClassTask->AssignClass(gvId, points, clazz);
+            return pAssignClassTask;
+        };
+        
+        if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
+        {
+            //callback.OnComplete(CommandResponse(CommandResult::QUEUE_FULL));
+        }
+    }
+    else
+    {
+        //callback.OnComplete(CommandResponse(CommandResult::NO_COMMS));
+    }
+}
+
 }

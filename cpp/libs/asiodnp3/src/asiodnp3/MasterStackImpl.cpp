@@ -51,6 +51,11 @@ ICommandProcessor* MasterStackImpl::GetCommandProcessor()
 {
 	return &master.GetCommandProcessor();
 }
+    
+IFunctionProcessor* MasterStackImpl::GetFunctionProcessor()
+{
+	return &master.GetFunctionProcessor();
+}
 
 bool MasterStackImpl::Enable()
 {

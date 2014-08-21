@@ -32,11 +32,12 @@
 #include "opendnp3/master/IMasterState.h"
 #include "opendnp3/master/ITaskLock.h"
 #include "opendnp3/master/IMasterApplication.h"
+#include "opendnp3/master/IFunctionProcessor.h"
 
 namespace opendnp3
 {
 
-class MasterContext : public ICommandProcessor, public IScheduleCallback
+class MasterContext : public ICommandProcessor, public IFunctionProcessor, public IScheduleCallback
 {
 	public:	
 
@@ -102,7 +103,10 @@ class MasterContext : public ICommandProcessor, public IScheduleCallback
 
 	virtual void SelectAndOperate(const AnalogOutputDouble64& command, uint16_t index, ICommandCallback& callback) override final;
 	virtual void DirectOperate(const AnalogOutputDouble64& command, uint16_t index, ICommandCallback& callback) override final;
-
+    
+    // ------- other function events ----------
+    virtual void AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz) override final;
+    
 	// ----- Helpers accessible by the state objects -----
 	void StartTask(IMasterTask* pTask);
 	bool CancelResponseTimer();
@@ -133,6 +137,9 @@ class MasterContext : public ICommandProcessor, public IScheduleCallback
 
 	template <class T>
 	void DirectOperateT(const T& command, uint16_t index, ICommandCallback& callback);
+
+    template <class T>
+    void AssignClassT(const T& command, const PointIndexes* points, const PointClass clazz);
 };
 
 template <class T>

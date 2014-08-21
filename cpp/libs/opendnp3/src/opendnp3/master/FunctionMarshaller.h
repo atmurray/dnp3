@@ -18,43 +18,38 @@
  * may have been made to this file. Automatak, LLC licenses these modifications
  * to you under the terms of the License.
  */
+#ifndef __FUNCTION_MARSHALLER_H_
+#define __FUNCTION_MARSHALLER_H_
 
-#ifndef __MASTER_TASKS_H_
-#define __MASTER_TASKS_H_
+#include "IFunctionProcessor.h"
 
-#include "opendnp3/master/ClearRestartTask.h"
-#include "opendnp3/master/EnableUnsolicitedTask.h"
-#include "opendnp3/master/StartupIntegrityPoll.h"
-#include "opendnp3/master/DisableUnsolicitedTask.h"
-#include "opendnp3/master/SerialTimeSyncTask.h"
-#include "opendnp3/master/CommandTask.h"
-#include "opendnp3/master/AssignClassTask.h"
+#include <openpal/executor/IExecutor.h>
 
 namespace opendnp3
 {
 
-class MasterTasks
+/**
+* Marshalls commands from any thread to an executor
+*/
+class FunctionMarshaller : public IFunctionProcessor
 {
-
+	
 public:
 
-	MasterTasks(openpal::Logger* pLogger, ISOEHandler& SOEHandler, openpal::IUTCTimeSource& timeSource);
+	FunctionMarshaller(openpal::IExecutor& executor, IFunctionProcessor& proxyTo);
+   
+    // Implement the IFunctionProcessor interface
+    
+    virtual void AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz) override final;
 
-	// reconfigurable tasks for doing commands
-	CommandTask commandTask;	
-    AssignClassTask assignClassTask;
+private:
 
-	// master tasks that can be "failed" (startup and in response to IIN bits)
-	EnableUnsolicitedTask enableUnsol;
-	ClearRestartTask clearRestartTask;
-	StartupIntegrityPoll startupIntegrity;
-	DisableUnsolicitedTask disableUnsol;	
-	SerialTimeSyncTask serialTimeSync;
+	openpal::IExecutor* pExecutor;
+	IFunctionProcessor* pProxyTo;
 	
 };
 
 }
 
-
-
 #endif
+

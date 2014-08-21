@@ -32,7 +32,8 @@ clearRestartTask(pLogger),
 startupIntegrity(&SOEHandler, pLogger),
 disableUnsol(pLogger),	
 serialTimeSync(pLogger, &timeSource),
-commandTask(pLogger)
+commandTask(pLogger),
+assignClassTask(pLogger)
 {
 	
 }

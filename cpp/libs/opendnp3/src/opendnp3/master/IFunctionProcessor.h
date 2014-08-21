@@ -18,43 +18,32 @@
  * may have been made to this file. Automatak, LLC licenses these modifications
  * to you under the terms of the License.
  */
+#ifndef __I_FUNCTION_PROCESSOR_H_
+#define __I_FUNCTION_PROCESSOR_H_
 
-#ifndef __MASTER_TASKS_H_
-#define __MASTER_TASKS_H_
-
-#include "opendnp3/master/ClearRestartTask.h"
-#include "opendnp3/master/EnableUnsolicitedTask.h"
-#include "opendnp3/master/StartupIntegrityPoll.h"
-#include "opendnp3/master/DisableUnsolicitedTask.h"
-#include "opendnp3/master/SerialTimeSyncTask.h"
-#include "opendnp3/master/CommandTask.h"
-#include "opendnp3/master/AssignClassTask.h"
+#include "opendnp3/gen/GroupVariation.h"
+#include "opendnp3/gen/PointClass.h"
+#include "opendnp3/app/PointIndexes.h"
 
 namespace opendnp3
 {
 
-class MasterTasks
+/**
+* Interface used to dispatch miscelaneous functions from application code to a master
+*/
+class IFunctionProcessor
 {
-
 public:
 
-	MasterTasks(openpal::Logger* pLogger, ISOEHandler& SOEHandler, openpal::IUTCTimeSource& timeSource);
-
-	// reconfigurable tasks for doing commands
-	CommandTask commandTask;	
-    AssignClassTask assignClassTask;
-
-	// master tasks that can be "failed" (startup and in response to IIN bits)
-	EnableUnsolicitedTask enableUnsol;
-	ClearRestartTask clearRestartTask;
-	StartupIntegrityPoll startupIntegrity;
-	DisableUnsolicitedTask disableUnsol;	
-	SerialTimeSyncTask serialTimeSync;
-	
+	/**
+	* Sends the function Assign Class that assigns points in the specified object to the specified class
+	* @param gvId object group (always variation 0) to assign points from
+	* @param points collection of point indexes to assign
+	* @param clazz point class to assign the indexes
+	*/
+  	virtual void AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz) = 0;
 };
 
 }
-
-
 
 #endif

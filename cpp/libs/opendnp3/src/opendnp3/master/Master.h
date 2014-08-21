@@ -23,6 +23,7 @@
 
 #include "opendnp3/master/MasterContext.h"
 #include "opendnp3/master/CommandMarshaller.h"
+#include "opendnp3/master/FunctionMarshaller.h"
 #include "opendnp3/master/MasterScan.h"
 #include "opendnp3/master/IMasterApplication.h"
 
@@ -55,6 +56,8 @@ class Master : public openpal::IUpperLayer
 	/// ----- Misc public members -------
 	
 	ICommandProcessor& GetCommandProcessor();
+    
+    IFunctionProcessor& GetFunctionProcessor();
 
 	MasterScan AddScan(openpal::TimeDuration period, const openpal::Action1<APDURequest&> builder);
 
@@ -68,6 +71,7 @@ class Master : public openpal::IUpperLayer
 
 	MasterContext context;
 	CommandMarshaller commandMarshaller;
+    FunctionMarshaller functionMarshaller;
 };
 
 }

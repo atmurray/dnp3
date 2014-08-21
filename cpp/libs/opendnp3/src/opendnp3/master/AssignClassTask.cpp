@@ -44,6 +44,56 @@ AssignClassTask::AssignClassTask(openpal::Logger* pLogger_) :
     analogOutputCommandClasses.ToIndexable().foreach(SetEmptyIndexes);
 }
 
+void AssignClassTask::AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz) {
+    switch (gvId)
+    {
+        case(GroupVariation::Group1Var0):
+        case(GroupVariation::Group2Var0):
+            return Assign(binaryInputClasses, points, clazz);
+        case(GroupVariation::Group3Var0):
+        case(GroupVariation::Group4Var0):
+            return Assign(doubleBinaryInputClasses, points, clazz);
+        case(GroupVariation::Group30Var0):
+        case(GroupVariation::Group32Var0):
+            return Assign(analogInputClasses, points, clazz);
+        case(GroupVariation::Group31Var0):
+        case(GroupVariation::Group33Var0):
+            return Assign(frozenAnalogInputClasses, points, clazz);
+        case(GroupVariation::Group20Var0):
+        case(GroupVariation::Group22Var0):
+            return Assign(counterClasses, points, clazz);
+        case(GroupVariation::Group21Var0):
+        case(GroupVariation::Group23Var0):
+            return Assign(frozenCounterClasses, points, clazz);
+        case(GroupVariation::Group10Var0):
+        case(GroupVariation::Group11Var0):
+            return Assign(binaryOutputStatusClasses, points, clazz);
+        case(GroupVariation::Group12Var0):
+        case(GroupVariation::Group13Var0):
+            return Assign(binaryOutputCommandClasses, points, clazz);
+        case(GroupVariation::Group40Var0):
+        case(GroupVariation::Group42Var0):
+            return Assign(analogOutputStatusClasses, points, clazz);
+        case(GroupVariation::Group41Var0):
+        case(GroupVariation::Group43Var0):
+            return Assign(analogOutputCommandClasses, points, clazz);
+        case(GroupVariation::Group70Var0):
+            return Assign(fileClasses, points, clazz);
+        //case(GroupVariation::Group110Var0):
+        //case(GroupVariation::Group111Var0):
+        case(GroupVariation::Group110AnyVar):
+        case(GroupVariation::Group111AnyVar):
+            return Assign(octetStringClasses, points, clazz);
+        case(GroupVariation::Group112Var0):
+        case(GroupVariation::Group113Var0):
+            return Assign(virtualTerminalClasses, points, clazz);
+        default:
+            FORMAT_LOGGER_BLOCK_WITH_CODE(pLogger, flags::WARN, ALERR_ILLEGAL_QUALIFIER_AND_OBJECT,
+                                          "Unsupported group/variation - %s",
+                                          GroupVariationToString(gvId));
+    }
+}
+    
 void AssignClassTask::BuildRequest(APDURequest& request, const MasterParams& params, uint8_t seq)
 {
     if (classes.HasAnyClass())
@@ -56,7 +106,7 @@ void AssignClassTask::BuildRequest(APDURequest& request, const MasterParams& par
         if (classes.HasClass0())
         {
             // write class object header to specify the class to assign points to
-            writer.WriteHeader(GroupVariationID(60,0), QualifierCode::ALL_OBJECTS);
+            writer.WriteHeader(GroupVariationID(60,1), QualifierCode::ALL_OBJECTS);
             // write data object headers to specify the points to assign
             AddDataObjectHeaders(writer, GroupVariationID(1,0), binaryInputClasses[0]);
             AddDataObjectHeaders(writer, GroupVariationID(3,0), doubleBinaryInputClasses[0]);
@@ -73,7 +123,7 @@ void AssignClassTask::BuildRequest(APDURequest& request, const MasterParams& par
         if (classes.HasClass1())
         {
             // write class object header to specify the class to assign points to
-            writer.WriteHeader(GroupVariationID(60,1), QualifierCode::ALL_OBJECTS);
+            writer.WriteHeader(GroupVariationID(60,2), QualifierCode::ALL_OBJECTS);
             // write data object headers to specify the points to assign
             AddDataObjectHeaders(writer, GroupVariationID(1,0), binaryInputClasses[1]);
             AddDataObjectHeaders(writer, GroupVariationID(3,0), doubleBinaryInputClasses[1]);
@@ -90,7 +140,7 @@ void AssignClassTask::BuildRequest(APDURequest& request, const MasterParams& par
         if (classes.HasClass2())
         {
             // write class object header to specify the class to assign points to
-            writer.WriteHeader(GroupVariationID(60,2), QualifierCode::ALL_OBJECTS);
+            writer.WriteHeader(GroupVariationID(60,3), QualifierCode::ALL_OBJECTS);
             // write data object headers to specify the points to assign
             AddDataObjectHeaders(writer, GroupVariationID(1,0), binaryInputClasses[2]);
             AddDataObjectHeaders(writer, GroupVariationID(3,0), doubleBinaryInputClasses[2]);
@@ -107,7 +157,7 @@ void AssignClassTask::BuildRequest(APDURequest& request, const MasterParams& par
         if (classes.HasClass3())
         {
             // write class object header to specify the class to assign points to
-            writer.WriteHeader(GroupVariationID(60,3), QualifierCode::ALL_OBJECTS);
+            writer.WriteHeader(GroupVariationID(60,4), QualifierCode::ALL_OBJECTS);
             // write data object headers to specify the points to assign
             AddDataObjectHeaders(writer, GroupVariationID(1,0), binaryInputClasses[3]);
             AddDataObjectHeaders(writer, GroupVariationID(3,0), doubleBinaryInputClasses[3]);
@@ -125,7 +175,7 @@ void AssignClassTask::BuildRequest(APDURequest& request, const MasterParams& par
 
 //bool AssignClassTask::Enabled(const MasterParams& params)
 //{
-//	return params.disableUnsolOnStartup;
+//	return params.assignClassOnStartup;
 //}
 
 void AssignClassTask::OnTimeoutOrBadControlOctet(const MasterParams& params, IMasterScheduler& scheduler)

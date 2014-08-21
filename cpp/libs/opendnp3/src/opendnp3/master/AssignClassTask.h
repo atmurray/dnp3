@@ -25,16 +25,13 @@
 
 #include "opendnp3/gen/FunctionCode.h"
 
-#include "opendnp3/master/SingleResponseTask.h"
-#include "opendnp3/master/CommandResponse.h"
-#include "opendnp3/master/ICommandCallback.h"
-#include "opendnp3/master/ICommandProcessor.h"
+#include "opendnp3/master/IFunctionProcessor.h"
 #include "opendnp3/master/CommandSequence.h"
-
-#include "opendnp3/app/PointIndexes.h"
+#include "opendnp3/ErrorCodes.h"
 
 #include <openpal/logging/Logger.h>
 #include <openpal/Configure.h>
+#include <openpal/container/StaticArray.h>
 #include <openpal/container/StaticQueue.h>
 #include <openpal/container/Pair.h>
 #include <assert.h>
@@ -45,27 +42,15 @@ namespace opendnp3
 /**
 * Base class for tasks that only require a single response
 */
-class AssignClassTask : public NullResponseTask
+class AssignClassTask : public NullResponseTask, IFunctionProcessor
 {	
 
 public:	
 
 	AssignClassTask(openpal::Logger* pLogger_);
     
-  	void AssignBinaryInput(const PointIndexes* points, const PointClass clazz) { Assign(binaryInputClasses, points, clazz); };
-  	void AssignDoubleBinaryInput(const PointIndexes* points, const PointClass clazz) { Assign(doubleBinaryInputClasses, points, clazz); };
-  	void AssignAnalogInput(const PointIndexes* points, const PointClass clazz) { Assign(analogInputClasses, points, clazz); };
-  	void AssignFrozenAnalogInput(const PointIndexes* points, const PointClass clazz) { Assign(frozenAnalogInputClasses, points, clazz); };
-  	void AssignCounter(const PointIndexes* points, const PointClass clazz) { Assign(counterClasses, points, clazz); };
-  	void AssignFrozenCounter(const PointIndexes* points, const PointClass clazz) { Assign(frozenCounterClasses, points, clazz); };
-  	void AssignBinaryOutputStatus(const PointIndexes* points, const PointClass clazz) { Assign(binaryOutputStatusClasses, points, clazz); };
-  	void AssignBinaryOutputCommand(const PointIndexes* points, const PointClass clazz) { Assign(binaryOutputCommandClasses, points, clazz); };
-  	void AssignAnalogOutputStatus(const PointIndexes* points, const PointClass clazz) { Assign(analogOutputStatusClasses, points, clazz); };
-  	void AssignAnalogOutputCommand(const PointIndexes* points, const PointClass clazz) { Assign(analogOutputCommandClasses, points, clazz); };
-  	void AssignFile(const PointIndexes* points, const PointClass clazz) { Assign(fileClasses, points, clazz); };
-  	void AssignOctetString(const PointIndexes* points, const PointClass clazz) { Assign(octetStringClasses, points, clazz); };
-  	void AssignVirtualTerminal(const PointIndexes* points, const PointClass clazz) { Assign(virtualTerminalClasses, points, clazz); };
-    
+  	virtual void AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz) override final;
+
 	virtual char const* Name() const override final { return "Assign Class"; }
 
 	virtual void BuildRequest(APDURequest& request, const MasterParams& params, uint8_t seq) override final;	

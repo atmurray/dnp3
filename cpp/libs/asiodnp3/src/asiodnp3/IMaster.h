@@ -27,6 +27,7 @@
 #include <opendnp3/app/ClassField.h>
 #include <opendnp3/master/MasterScan.h>
 #include <opendnp3/master/ICommandProcessor.h>
+#include <opendnp3/master/IFunctionProcessor.h>
 #include <openpal/executor/TimeDuration.h>
 
 namespace asiodnp3
@@ -72,6 +73,12 @@ public:
 	* @return Interface used to invoke commands
 	*/
 	virtual opendnp3::ICommandProcessor* GetCommandProcessor() = 0;
+    
+	/**
+     * Get a function processor interface to execute miscellaneous functions on the master
+     * @return Interface used to invoke functions
+     */
+    virtual opendnp3::IFunctionProcessor* GetFunctionProcessor() = 0;
 };
 
 }
