@@ -18,41 +18,50 @@
  * may have been made to this file. Automatak, LLC licenses these modifications
  * to you under the terms of the License.
  */
-#ifndef __ENABLE_UNSOLICITED_TASK_H_
-#define __ENABLE_UNSOLICITED_TASK_H_
+#ifndef __FREEZE_TASK_H_
+#define __FREEZE_TASK_H_
 
-#include "opendnp3/master/NullResponseTask.h"
+
+#include "opendnp3/gen/FunctionCode.h"
+
+#include "opendnp3/master/CallbackTaskBase.h"
+#include "opendnp3/master/CommandResponse.h"
+#include "opendnp3/master/ICommandCallback.h"
+#include "opendnp3/master/ICommandProcessor.h"
+#include "opendnp3/master/CommandSequence.h"
+
+#include <openpal/logging/Logger.h>
+#include <openpal/Configure.h>
+#include <openpal/container/StaticQueue.h>
+#include <assert.h>
 
 namespace opendnp3
 {
 
-/**
-* Base class for tasks that only require a single response
-*/
-class EnableUnsolicitedTask : public NullResponseTask
-{	
-
+//
+class FreezeTask : public CallbackTaskBase
+{
+	
 public:	
 
-	EnableUnsolicitedTask(openpal::Logger* pLogger_);
+	FreezeTask(openpal::Logger* pLogger_);
 
-	virtual char const* Name() const override final { return "Enable Unsolicited"; }
+	virtual void ImmediateFreeze(GroupVariationID gvId, const PointIndexes* points, ICommandCallback& callback) final;
+	virtual void FreezeClear(GroupVariationID gvId, const PointIndexes* points, ICommandCallback& callback) final;
 
-	virtual void BuildRequest(APDURequest& request, const MasterParams& params, uint8_t seq) override final;				
-
-	virtual bool Enabled(const MasterParams& params) { return params.unsolClassMask.HasEventClass(); }
+	virtual char const* Name() const override final { return "Freeze Task"; }
+	
+	virtual void BuildRequest(APDURequest& request, const MasterParams& params, uint8_t seq) override final;
 
 private:
 
-	virtual void OnSuccess(const MasterParams& params, IMasterScheduler& scheduler) override final {}
-
-	virtual void OnTimeoutOrBadControlOctet(const MasterParams& params, IMasterScheduler& scheduler) override final;
-    
-    ClassField unsolClassMask;
+	FunctionCode pFunctionCode;
+    GroupVariationID pGroupVar;
+    const PointIndexes* pPoints;
 
 };
 
-} //end ns
 
+} //end ns
 
 #endif

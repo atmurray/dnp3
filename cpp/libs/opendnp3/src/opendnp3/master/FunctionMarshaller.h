@@ -39,8 +39,12 @@ public:
 	FunctionMarshaller(openpal::IExecutor& executor, IFunctionProcessor& proxyTo);
    
     // Implement the IFunctionProcessor interface
-    
+	virtual void ImmediateFreeze(GroupVariationID gvId, const PointIndexes* points, ICommandCallback& callback) override final;
+	virtual void FreezeClear(GroupVariationID gvId, const PointIndexes* points, ICommandCallback& callback) override final;
+    virtual void EnableUnsolicited(const ClassField& classes) override final;
+    virtual void DisableUnsolicited(const ClassField& classes) override final;
     virtual void AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz) override final;
+    virtual void AssignClassExecute(ICommandCallback& callback) override final;
 
 private:
 

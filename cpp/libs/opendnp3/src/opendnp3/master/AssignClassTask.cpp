@@ -29,7 +29,7 @@ namespace opendnp3
 {
 
 AssignClassTask::AssignClassTask(openpal::Logger* pLogger_) :
-    NullResponseTask(pLogger_)
+    CallbackTaskBase(pLogger_)
 {
     auto SetEmptyIndexes = [](const PointIndexes*& p){p = &PointIndexes::EMPTYINDEXES;};
     binaryInputClasses.ToIndexable().foreach(SetEmptyIndexes);
@@ -108,16 +108,16 @@ void AssignClassTask::BuildRequest(APDURequest& request, const MasterParams& par
             // write class object header to specify the class to assign points to
             writer.WriteHeader(GroupVariationID(60,1), QualifierCode::ALL_OBJECTS);
             // write data object headers to specify the points to assign
-            AddDataObjectHeaders(writer, GroupVariationID(1,0), binaryInputClasses[0]);
-            AddDataObjectHeaders(writer, GroupVariationID(3,0), doubleBinaryInputClasses[0]);
-            AddDataObjectHeaders(writer, GroupVariationID(30,0), analogInputClasses[0]);
-            AddDataObjectHeaders(writer, GroupVariationID(31,0), frozenAnalogInputClasses[0]);
-            AddDataObjectHeaders(writer, GroupVariationID(20,0), counterClasses[0]);
-            AddDataObjectHeaders(writer, GroupVariationID(21,0), frozenCounterClasses[0]);
-            AddDataObjectHeaders(writer, GroupVariationID(10,0), binaryOutputStatusClasses[0]);
-            AddDataObjectHeaders(writer, GroupVariationID(12,0), binaryOutputCommandClasses[0]);
-            AddDataObjectHeaders(writer, GroupVariationID(40,0), analogOutputStatusClasses[0]);
-            AddDataObjectHeaders(writer, GroupVariationID(41,0), analogOutputCommandClasses[0]);
+            build::AddDataObjectHeaders(request, GroupVariationID(1,0), binaryInputClasses[0]);
+            build::AddDataObjectHeaders(request, GroupVariationID(3,0), doubleBinaryInputClasses[0]);
+            build::AddDataObjectHeaders(request, GroupVariationID(30,0), analogInputClasses[0]);
+            build::AddDataObjectHeaders(request, GroupVariationID(31,0), frozenAnalogInputClasses[0]);
+            build::AddDataObjectHeaders(request, GroupVariationID(20,0), counterClasses[0]);
+            build::AddDataObjectHeaders(request, GroupVariationID(21,0), frozenCounterClasses[0]);
+            build::AddDataObjectHeaders(request, GroupVariationID(10,0), binaryOutputStatusClasses[0]);
+            build::AddDataObjectHeaders(request, GroupVariationID(12,0), binaryOutputCommandClasses[0]);
+            build::AddDataObjectHeaders(request, GroupVariationID(40,0), analogOutputStatusClasses[0]);
+            build::AddDataObjectHeaders(request, GroupVariationID(41,0), analogOutputCommandClasses[0]);
         }
         
         if (classes.HasClass1())
@@ -125,16 +125,16 @@ void AssignClassTask::BuildRequest(APDURequest& request, const MasterParams& par
             // write class object header to specify the class to assign points to
             writer.WriteHeader(GroupVariationID(60,2), QualifierCode::ALL_OBJECTS);
             // write data object headers to specify the points to assign
-            AddDataObjectHeaders(writer, GroupVariationID(1,0), binaryInputClasses[1]);
-            AddDataObjectHeaders(writer, GroupVariationID(3,0), doubleBinaryInputClasses[1]);
-            AddDataObjectHeaders(writer, GroupVariationID(30,0), analogInputClasses[1]);
-            AddDataObjectHeaders(writer, GroupVariationID(31,0), frozenAnalogInputClasses[1]);
-            AddDataObjectHeaders(writer, GroupVariationID(20,0), counterClasses[1]);
-            AddDataObjectHeaders(writer, GroupVariationID(21,0), frozenCounterClasses[1]);
-            AddDataObjectHeaders(writer, GroupVariationID(10,0), binaryOutputStatusClasses[1]);
-            AddDataObjectHeaders(writer, GroupVariationID(12,0), binaryOutputCommandClasses[1]);
-            AddDataObjectHeaders(writer, GroupVariationID(40,0), analogOutputStatusClasses[1]);
-            AddDataObjectHeaders(writer, GroupVariationID(41,0), analogOutputCommandClasses[1]);
+            build::AddDataObjectHeaders(request, GroupVariationID(1,0), binaryInputClasses[1]);
+            build::AddDataObjectHeaders(request, GroupVariationID(3,0), doubleBinaryInputClasses[1]);
+            build::AddDataObjectHeaders(request, GroupVariationID(30,0), analogInputClasses[1]);
+            build::AddDataObjectHeaders(request, GroupVariationID(31,0), frozenAnalogInputClasses[1]);
+            build::AddDataObjectHeaders(request, GroupVariationID(20,0), counterClasses[1]);
+            build::AddDataObjectHeaders(request, GroupVariationID(21,0), frozenCounterClasses[1]);
+            build::AddDataObjectHeaders(request, GroupVariationID(10,0), binaryOutputStatusClasses[1]);
+            build::AddDataObjectHeaders(request, GroupVariationID(12,0), binaryOutputCommandClasses[1]);
+            build::AddDataObjectHeaders(request, GroupVariationID(40,0), analogOutputStatusClasses[1]);
+            build::AddDataObjectHeaders(request, GroupVariationID(41,0), analogOutputCommandClasses[1]);
         }
         
         if (classes.HasClass2())
@@ -142,16 +142,16 @@ void AssignClassTask::BuildRequest(APDURequest& request, const MasterParams& par
             // write class object header to specify the class to assign points to
             writer.WriteHeader(GroupVariationID(60,3), QualifierCode::ALL_OBJECTS);
             // write data object headers to specify the points to assign
-            AddDataObjectHeaders(writer, GroupVariationID(1,0), binaryInputClasses[2]);
-            AddDataObjectHeaders(writer, GroupVariationID(3,0), doubleBinaryInputClasses[2]);
-            AddDataObjectHeaders(writer, GroupVariationID(30,0), analogInputClasses[2]);
-            AddDataObjectHeaders(writer, GroupVariationID(31,0), frozenAnalogInputClasses[2]);
-            AddDataObjectHeaders(writer, GroupVariationID(20,0), counterClasses[2]);
-            AddDataObjectHeaders(writer, GroupVariationID(21,0), frozenCounterClasses[2]);
-            AddDataObjectHeaders(writer, GroupVariationID(10,0), binaryOutputStatusClasses[2]);
-            AddDataObjectHeaders(writer, GroupVariationID(12,0), binaryOutputCommandClasses[2]);
-            AddDataObjectHeaders(writer, GroupVariationID(40,0), analogOutputStatusClasses[2]);
-            AddDataObjectHeaders(writer, GroupVariationID(41,0), analogOutputCommandClasses[2]);
+            build::AddDataObjectHeaders(request, GroupVariationID(1,0), binaryInputClasses[2]);
+            build::AddDataObjectHeaders(request, GroupVariationID(3,0), doubleBinaryInputClasses[2]);
+            build::AddDataObjectHeaders(request, GroupVariationID(30,0), analogInputClasses[2]);
+            build::AddDataObjectHeaders(request, GroupVariationID(31,0), frozenAnalogInputClasses[2]);
+            build::AddDataObjectHeaders(request, GroupVariationID(20,0), counterClasses[2]);
+            build::AddDataObjectHeaders(request, GroupVariationID(21,0), frozenCounterClasses[2]);
+            build::AddDataObjectHeaders(request, GroupVariationID(10,0), binaryOutputStatusClasses[2]);
+            build::AddDataObjectHeaders(request, GroupVariationID(12,0), binaryOutputCommandClasses[2]);
+            build::AddDataObjectHeaders(request, GroupVariationID(40,0), analogOutputStatusClasses[2]);
+            build::AddDataObjectHeaders(request, GroupVariationID(41,0), analogOutputCommandClasses[2]);
         }
         
         if (classes.HasClass3())
@@ -159,16 +159,16 @@ void AssignClassTask::BuildRequest(APDURequest& request, const MasterParams& par
             // write class object header to specify the class to assign points to
             writer.WriteHeader(GroupVariationID(60,4), QualifierCode::ALL_OBJECTS);
             // write data object headers to specify the points to assign
-            AddDataObjectHeaders(writer, GroupVariationID(1,0), binaryInputClasses[3]);
-            AddDataObjectHeaders(writer, GroupVariationID(3,0), doubleBinaryInputClasses[3]);
-            AddDataObjectHeaders(writer, GroupVariationID(30,0), analogInputClasses[3]);
-            AddDataObjectHeaders(writer, GroupVariationID(31,0), frozenAnalogInputClasses[3]);
-            AddDataObjectHeaders(writer, GroupVariationID(20,0), counterClasses[3]);
-            AddDataObjectHeaders(writer, GroupVariationID(21,0), frozenCounterClasses[3]);
-            AddDataObjectHeaders(writer, GroupVariationID(10,0), binaryOutputStatusClasses[3]);
-            AddDataObjectHeaders(writer, GroupVariationID(12,0), binaryOutputCommandClasses[3]);
-            AddDataObjectHeaders(writer, GroupVariationID(40,0), analogOutputStatusClasses[3]);
-            AddDataObjectHeaders(writer, GroupVariationID(41,0), analogOutputCommandClasses[3]);
+            build::AddDataObjectHeaders(request, GroupVariationID(1,0), binaryInputClasses[3]);
+            build::AddDataObjectHeaders(request, GroupVariationID(3,0), doubleBinaryInputClasses[3]);
+            build::AddDataObjectHeaders(request, GroupVariationID(30,0), analogInputClasses[3]);
+            build::AddDataObjectHeaders(request, GroupVariationID(31,0), frozenAnalogInputClasses[3]);
+            build::AddDataObjectHeaders(request, GroupVariationID(20,0), counterClasses[3]);
+            build::AddDataObjectHeaders(request, GroupVariationID(21,0), frozenCounterClasses[3]);
+            build::AddDataObjectHeaders(request, GroupVariationID(10,0), binaryOutputStatusClasses[3]);
+            build::AddDataObjectHeaders(request, GroupVariationID(12,0), binaryOutputCommandClasses[3]);
+            build::AddDataObjectHeaders(request, GroupVariationID(40,0), analogOutputStatusClasses[3]);
+            build::AddDataObjectHeaders(request, GroupVariationID(41,0), analogOutputCommandClasses[3]);
         }
 	}
 }
@@ -177,27 +177,6 @@ void AssignClassTask::BuildRequest(APDURequest& request, const MasterParams& par
 //{
 //	return params.assignClassOnStartup;
 //}
-
-void AssignClassTask::OnTimeoutOrBadControlOctet(const MasterParams& params, IMasterScheduler& scheduler)
-{
-	scheduler.SetBlocking(*this, params.taskRetryPeriod);
-}
-    
-void AssignClassTask::AddDataObjectHeaders(HeaderWriter& writer, GroupVariationID gvId, const PointIndexes* gvRanges)
-{
-    if (gvRanges->IsEmpty()) return;
-    if (gvRanges->IsFull())
-    {
-        writer.WriteHeader(gvId, QualifierCode::ALL_OBJECTS);
-    }
-    else
-    {
-        for (uint16_t i = 0; i < gvRanges->ranges.Size(); i++)
-        {
-            writer.WriteRangeHeader<openpal::UInt16>(QualifierCode::UINT16_START_STOP, gvId, gvRanges->ranges[i].start, gvRanges->ranges[i].stop);
-        }
-    }
-}
 
 
 } //end ns

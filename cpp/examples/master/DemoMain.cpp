@@ -28,6 +28,8 @@
 #include <opendnp3/LogLevels.h>
 #include <opendnp3/app/ControlRelayOutputBlock.h>
 
+#include <opendnp3/app/DynamicPointIndexes.h>
+
 #include "BlockingCommandCallback.h"
 
 #include <thread>
@@ -96,6 +98,11 @@ int main(int argc, char* argv[])
 	pMaster->Enable();
 
 	auto pCommandProcessor = pMaster->GetCommandProcessor();
+    auto pFunctionProcessor = pMaster->GetFunctionProcessor();
+    
+    DynamicPointIndexes points({1,2,3,4});
+    PointIndexes temp = points;
+    
 
 	do
 	{
@@ -130,6 +137,41 @@ int main(int argc, char* argv[])
 								 " Status: " << CommandStatusToString(response.GetStatus()) << std::endl;
 					break;
 				}
+            case('1'):
+            {
+                BlockingCommandCallback handler;
+                pFunctionProcessor->AssignClass(GroupVariation::Group1Var0, &temp, PointClass::Class3);
+                pFunctionProcessor->AssignClass(GroupVariation::Group30Var0, &temp, PointClass::Class2);
+                pFunctionProcessor->AssignClassExecute(handler);
+                auto response = handler.WaitForResult();
+                std::cout << "Result: " << CommandResultToString(response.GetResult()) <<
+                " Status: " << CommandStatusToString(response.GetStatus()) << std::endl;
+                break;
+            }
+            case('2'):
+                pFunctionProcessor->EnableUnsolicited(opendnp3::ClassField::CLASS_0);
+                break;
+            case('3'):
+                pFunctionProcessor->DisableUnsolicited(opendnp3::ClassField::CLASS_0);
+                break;
+            case('4'):
+            {
+                BlockingCommandCallback handler;
+                pFunctionProcessor->ImmediateFreeze(GroupVariationID(20,0), &PointIndexes::FULLINDEXES, handler);
+                auto response = handler.WaitForResult();
+                std::cout << "Result: " << CommandResultToString(response.GetResult()) <<
+                " Status: " << CommandStatusToString(response.GetStatus()) << std::endl;
+                break;
+            }
+            case('5'):
+            {
+                BlockingCommandCallback handler;
+                pFunctionProcessor->FreezeClear(GroupVariationID(20,0), &PointIndexes::FULLINDEXES, handler);
+                auto response = handler.WaitForResult();
+                std::cout << "Result: " << CommandResultToString(response.GetResult()) <<
+                " Status: " << CommandStatusToString(response.GetStatus()) << std::endl;
+                break;
+            }
 			default:
 				std::cout << "Unknown action: " << cmd << std::endl;
 				break;

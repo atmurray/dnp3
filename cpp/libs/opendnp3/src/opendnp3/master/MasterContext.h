@@ -105,7 +105,12 @@ class MasterContext : public ICommandProcessor, public IFunctionProcessor, publi
 	virtual void DirectOperate(const AnalogOutputDouble64& command, uint16_t index, ICommandCallback& callback) override final;
     
     // ------- other function events ----------
+	virtual void ImmediateFreeze(GroupVariationID gvId, const PointIndexes* points, ICommandCallback& callback) override final;
+	virtual void FreezeClear(GroupVariationID gvId, const PointIndexes* points, ICommandCallback& callback) override final;
+    virtual void EnableUnsolicited(const ClassField& classes) override final;
+    virtual void DisableUnsolicited(const ClassField& classes) override final;
     virtual void AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz) override final;
+    virtual void AssignClassExecute(ICommandCallback& callback) override final;
     
 	// ----- Helpers accessible by the state objects -----
 	void StartTask(IMasterTask* pTask);
@@ -138,8 +143,6 @@ class MasterContext : public ICommandProcessor, public IFunctionProcessor, publi
 	template <class T>
 	void DirectOperateT(const T& command, uint16_t index, ICommandCallback& callback);
 
-    template <class T>
-    void AssignClassT(const T& command, const PointIndexes* points, const PointClass clazz);
 };
 
 template <class T>

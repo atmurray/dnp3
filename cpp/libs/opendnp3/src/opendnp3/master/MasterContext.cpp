@@ -345,16 +345,64 @@ void MasterContext::DirectOperate(const AnalogOutputDouble64& command, uint16_t 
 	this->DirectOperateT(command, index, callback);
 }
 
-void MasterContext::AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz)
+void MasterContext::ImmediateFreeze(GroupVariationID gvId, const PointIndexes* points, ICommandCallback& callback)
 {
     if (isOnline)
     {
-        auto pAssignClassTask = &staticTasks.assignClassTask;
+		auto pCallback = &callback;
+        auto pFreezeTask = &staticTasks.freezeTask;
         
-        auto userTask = [gvId, points, clazz, pAssignClassTask]()
+        auto userTask = [gvId, points, pCallback, pFreezeTask]()
         {
-            pAssignClassTask->AssignClass(gvId, points, clazz);
-            return pAssignClassTask;
+            pFreezeTask->ImmediateFreeze(gvId, points, *pCallback);
+            return pFreezeTask;
+        };
+        
+        if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
+        {
+            callback.OnComplete(CommandResponse(CommandResult::QUEUE_FULL));
+        }
+    }
+    else
+    {
+        callback.OnComplete(CommandResponse(CommandResult::NO_COMMS));
+    }
+}
+
+void MasterContext::FreezeClear(GroupVariationID gvId, const PointIndexes* points, ICommandCallback& callback)
+{
+    if (isOnline)
+    {
+		auto pCallback = &callback;
+        auto pFreezeTask = &staticTasks.freezeTask;
+        
+        auto userTask = [gvId, points, pCallback, pFreezeTask]()
+        {
+            pFreezeTask->FreezeClear(gvId, points, *pCallback);
+            return pFreezeTask;
+        };
+        
+        if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
+        {
+            callback.OnComplete(CommandResponse(CommandResult::QUEUE_FULL));
+        }
+    }
+    else
+    {
+        callback.OnComplete(CommandResponse(CommandResult::NO_COMMS));
+    }
+}
+    
+void MasterContext::EnableUnsolicited(const ClassField& classes)
+{
+    if (isOnline)
+    {
+        auto pEnableUnsolTask = &staticTasks.enableUnsol;
+        
+        auto userTask = [classes, pEnableUnsolTask]()
+        {
+            //pEnableUnsolTask->(classes);
+            return pEnableUnsolTask;
         };
         
         if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
@@ -367,5 +415,58 @@ void MasterContext::AssignClass(GroupVariation gvId, const PointIndexes* points,
         //callback.OnComplete(CommandResponse(CommandResult::NO_COMMS));
     }
 }
+    
+void MasterContext::DisableUnsolicited(const ClassField& classes)
+{
+    if (isOnline)
+    {
+        auto pDisableUnsolTask = &staticTasks.disableUnsol;
+        
+        auto userTask = [classes, pDisableUnsolTask]()
+        {
+            //pDisableUnsolTask->(classes);
+            return pDisableUnsolTask;
+        };
+        
+        if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
+        {
+            //callback.OnComplete(CommandResponse(CommandResult::QUEUE_FULL));
+        }
+    }
+    else
+    {
+        //callback.OnComplete(CommandResponse(CommandResult::NO_COMMS));
+    }
+}
+    
+void MasterContext::AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz)
+{
+    auto pAssignClassTask = &staticTasks.assignClassTask;
+    pAssignClassTask->AssignClass(gvId, points, clazz);
+}
 
+void MasterContext::AssignClassExecute(ICommandCallback& callback)
+{
+    if (isOnline)
+    {
+		auto pCallback = &callback;
+        auto pAssignClassTask = &staticTasks.assignClassTask;
+        
+        auto userTask = [pCallback, pAssignClassTask]()
+        {
+            pAssignClassTask->SetCallback(*pCallback);
+            return pAssignClassTask;
+        };
+        
+        if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
+        {
+            callback.OnComplete(CommandResponse(CommandResult::QUEUE_FULL));
+        }
+    }
+    else
+    {
+        callback.OnComplete(CommandResponse(CommandResult::NO_COMMS));
+    }
+}
+    
 }

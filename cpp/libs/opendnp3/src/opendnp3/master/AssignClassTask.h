@@ -21,7 +21,7 @@
 #ifndef __ASSIGN_CLASS_TASK_H_
 #define __ASSIGN_CLASS_TASK_H_
 
-#include "opendnp3/master/NullResponseTask.h"
+#include "opendnp3/master/CallbackTaskBase.h"
 
 #include "opendnp3/gen/FunctionCode.h"
 
@@ -36,21 +36,24 @@
 #include <openpal/container/Pair.h>
 #include <assert.h>
 
+#include "opendnp3/app/APDUBuilders.h"
+
+
 namespace opendnp3
 {
 
 /**
 * Base class for tasks that only require a single response
 */
-class AssignClassTask : public NullResponseTask, IFunctionProcessor
+class AssignClassTask : public CallbackTaskBase
 {	
 
 public:	
 
 	AssignClassTask(openpal::Logger* pLogger_);
     
-  	virtual void AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz) override final;
-
+  	virtual void AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz) final;
+    
 	virtual char const* Name() const override final { return "Assign Class"; }
 
 	virtual void BuildRequest(APDURequest& request, const MasterParams& params, uint8_t seq) override final;	
@@ -58,14 +61,6 @@ public:
 	//virtual bool Enabled(const MasterParams& params) override final;
 
 private:
-
-	virtual void OnSuccess(const MasterParams& params, IMasterScheduler& scheduler) override final {}
-
-	virtual void OnTimeoutOrBadControlOctet(const MasterParams& params, IMasterScheduler& scheduler) override final;
-        
-	ICommandSequence* pActiveSequence;
-    
-    void AddDataObjectHeaders(HeaderWriter& writer, GroupVariationID gvId, const PointIndexes* gvRanges);
 
     void Assign(openpal::StaticArray<const PointIndexes*, uint8_t, 4>& target, const PointIndexes* points, const PointClass clazz) {
         switch(clazz)

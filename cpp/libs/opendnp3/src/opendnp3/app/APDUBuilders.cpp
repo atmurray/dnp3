@@ -72,6 +72,23 @@ void WriteClassHeaders(APDURequest& request, const ClassField& classes)
 		writer.WriteHeader(Group60Var1::ID, QualifierCode::ALL_OBJECTS);
 	}
 }
+    
+void AddDataObjectHeaders(APDURequest& request, GroupVariationID gvId, const PointIndexes* gvRanges)
+{
+    auto writer = request.GetWriter();
+    if (gvRanges->IsEmpty()) return;
+    if (gvRanges->IsFull())
+    {
+        writer.WriteHeader(gvId, QualifierCode::ALL_OBJECTS);
+    }
+    else
+    {
+        for (uint16_t i = 0; i < gvRanges->ranges.Size(); i++)
+        {
+            writer.WriteRangeHeader<openpal::UInt16>(QualifierCode::UINT16_START_STOP, gvId, gvRanges->ranges[i].start, gvRanges->ranges[i].stop);
+        }
+    }
+}
 
 void DisableUnsolicited(APDURequest& request, uint8_t seq)
 {

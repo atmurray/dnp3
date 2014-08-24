@@ -28,6 +28,7 @@
 #include "opendnp3/master/DisableUnsolicitedTask.h"
 #include "opendnp3/master/SerialTimeSyncTask.h"
 #include "opendnp3/master/CommandTask.h"
+#include "opendnp3/master/FreezeTask.h"
 #include "opendnp3/master/AssignClassTask.h"
 
 namespace opendnp3
@@ -41,7 +42,8 @@ public:
 	MasterTasks(openpal::Logger* pLogger, ISOEHandler& SOEHandler, openpal::IUTCTimeSource& timeSource);
 
 	// reconfigurable tasks for doing commands
-	CommandTask commandTask;	
+	CommandTask commandTask;
+    FreezeTask freezeTask;
     AssignClassTask assignClassTask;
 
 	// master tasks that can be "failed" (startup and in response to IIN bits)

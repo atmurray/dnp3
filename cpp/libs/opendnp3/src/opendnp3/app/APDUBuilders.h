@@ -24,6 +24,7 @@
 #include "opendnp3/app/APDURequest.h"
 #include "opendnp3/app/APDUResponse.h"
 #include "opendnp3/app/ClassField.h"
+#include "opendnp3/app/PointIndexes.h"
 
 namespace opendnp3
 {
@@ -34,6 +35,8 @@ namespace build
 	void ClassRequest(APDURequest& request, FunctionCode code, const ClassField& classes, uint8_t seq);
 
 	void WriteClassHeaders(APDURequest& request, const ClassField& classes);
+    
+    void AddDataObjectHeaders(APDURequest& request, GroupVariationID gvId, const PointIndexes* gvRanges);
 
 	void ReadIntegrity(APDURequest& request, const ClassField& classes, uint8_t seq = 0);
 

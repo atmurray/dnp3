@@ -28,10 +28,35 @@ namespace opendnp3
 	pExecutor(&executor),
 	pProxyTo(&proxyTo)
 {}
+    
+void FunctionMarshaller::ImmediateFreeze(GroupVariationID gvId, const PointIndexes* points, ICommandCallback& callback)
+{
+    this->pProxyTo->ImmediateFreeze(gvId, points, callback);
+}
 
+void FunctionMarshaller::FreezeClear(GroupVariationID gvId, const PointIndexes* points, ICommandCallback& callback)
+{
+    this->pProxyTo->FreezeClear(gvId, points, callback);
+}
+    
+void FunctionMarshaller::EnableUnsolicited(const ClassField& classes)
+{
+    this->pProxyTo->EnableUnsolicited(classes);
+}
+
+void FunctionMarshaller::DisableUnsolicited(const ClassField& classes)
+{
+    this->pProxyTo->DisableUnsolicited(classes);
+}
+    
 void FunctionMarshaller::AssignClass(GroupVariation gvId, const PointIndexes* points, const PointClass clazz)
 {
     this->pProxyTo->AssignClass(gvId, points, clazz);
+}
+    
+void FunctionMarshaller::AssignClassExecute(ICommandCallback& callback)
+{
+    this->pProxyTo->AssignClassExecute(callback);
 }
     
 }

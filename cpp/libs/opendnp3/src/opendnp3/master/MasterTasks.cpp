@@ -33,6 +33,7 @@ startupIntegrity(&SOEHandler, pLogger),
 disableUnsol(pLogger),	
 serialTimeSync(pLogger, &timeSource),
 commandTask(pLogger),
+freezeTask(pLogger),
 assignClassTask(pLogger)
 {
 	
