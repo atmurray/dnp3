@@ -60,7 +60,8 @@ MasterContext::MasterContext(
 	pState(&MasterStateIdle::Instance()),
 	pResponseTimer(nullptr),
 	staticTasks(&logger, SOEHandler, application),
-	scheduler(&logger, staticTasks, executor, *this)
+	scheduler(&logger, staticTasks, executor, *this),
+	txBuffer(params.maxTxFragSize)
 {
 	
 }
@@ -135,16 +136,9 @@ void MasterContext::OnPendingTask()
 	this->PostCheckForTask();
 }
 
-bool MasterContext::QueueUserTask(const openpal::Function0<IMasterTask*>& action)
+void MasterContext::QueueUserTask(const openpal::Function0<IMasterTask*>& action)
 {
-	if (isOnline)
-	{
-		return scheduler.ScheduleUserTask(action);
-	}
-	else
-	{
-		return false;
-	}
+	scheduler.ScheduleUserTask(action);	
 }
 
 void MasterContext::OnResponseTimeout()
@@ -254,19 +248,20 @@ bool MasterContext::CancelResponseTimer()
 
 void MasterContext::QueueConfirm(const APDUHeader& header)
 {
-	this->confirmQueue.Enqueue(header);
+	this->confirmQueue.push_back(header);
 	this->CheckConfirmTransmit();
 }
 
 bool MasterContext::CheckConfirmTransmit()
 {
-	if (!isSending && confirmQueue.IsNotEmpty())
+	if (!isSending && !confirmQueue.empty())
 	{
-		auto pConfirm = confirmQueue.Pop();
+		auto pConfirm = confirmQueue.front();
 		APDUWrapper wrapper(txBuffer.GetWriteBuffer());
-		wrapper.SetFunction(pConfirm->function);
-		wrapper.SetControl(pConfirm->control);
+		wrapper.SetFunction(pConfirm.function);
+		wrapper.SetControl(pConfirm.control);
 		this->Transmit(wrapper.ToReadOnly());
+		confirmQueue.pop_front();
 		return true;
 	}
 	else
@@ -358,10 +353,7 @@ void MasterContext::ImmediateFreeze(GroupVariationID gvId, const PointIndexes* p
             return pFreezeTask;
         };
         
-        if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
-        {
-            callback.OnComplete(CommandResponse(CommandResult::QUEUE_FULL));
-        }
+        QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask));
     }
     else
     {
@@ -382,10 +374,7 @@ void MasterContext::FreezeClear(GroupVariationID gvId, const PointIndexes* point
             return pFreezeTask;
         };
         
-        if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
-        {
-            callback.OnComplete(CommandResponse(CommandResult::QUEUE_FULL));
-        }
+        QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask));
     }
     else
     {
@@ -405,10 +394,7 @@ void MasterContext::EnableUnsolicited(const ClassField& classes)
             return pEnableUnsolTask;
         };
         
-        if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
-        {
-            //callback.OnComplete(CommandResponse(CommandResult::QUEUE_FULL));
-        }
+        QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask));
     }
     else
     {
@@ -428,10 +414,7 @@ void MasterContext::DisableUnsolicited(const ClassField& classes)
             return pDisableUnsolTask;
         };
         
-        if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
-        {
-            //callback.OnComplete(CommandResponse(CommandResult::QUEUE_FULL));
-        }
+        QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask));
     }
     else
     {
@@ -458,10 +441,7 @@ void MasterContext::AssignClassExecute(ICommandCallback& callback)
             return pAssignClassTask;
         };
         
-        if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
-        {
-            callback.OnComplete(CommandResponse(CommandResult::QUEUE_FULL));
-        }
+        QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask));
     }
     else
     {

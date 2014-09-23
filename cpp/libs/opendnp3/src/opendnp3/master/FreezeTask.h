@@ -32,7 +32,6 @@
 
 #include <openpal/logging/Logger.h>
 #include <openpal/Configure.h>
-#include <openpal/container/StaticQueue.h>
 #include <assert.h>
 
 namespace opendnp3

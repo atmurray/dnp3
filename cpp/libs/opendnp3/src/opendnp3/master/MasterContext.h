@@ -18,21 +18,23 @@
  * may have been made to this file. Automatak, LLC licenses these modifications
  * to you under the terms of the License.
  */
-#ifndef __MASTER_CONTEXT_H_
-#define __MASTER_CONTEXT_H_
+#ifndef OPENDNP3_MASTERCONTEXT_H
+#define OPENDNP3_MASTERCONTEXT_H
 
-#include <openpal/channel/LayerInterfaces.h>
+#include "opendnp3/LayerInterfaces.h"
 
 #include <openpal/executor/IExecutor.h>
 #include <openpal/logging/LogRoot.h>
-#include <openpal/container/StaticQueue.h>
-#include <openpal/container/StaticBuffer.h>
+#include <openpal/container/Queue.h>
+#include <openpal/container/DynamicBuffer.h>
 
 #include "opendnp3/master/MasterScheduler.h"
 #include "opendnp3/master/IMasterState.h"
 #include "opendnp3/master/ITaskLock.h"
 #include "opendnp3/master/IMasterApplication.h"
 #include "opendnp3/master/IFunctionProcessor.h"
+
+#include <deque>
 
 namespace opendnp3
 {
@@ -43,7 +45,7 @@ class MasterContext : public ICommandProcessor, public IFunctionProcessor, publi
 
 	MasterContext(	openpal::IExecutor& executor,
 					openpal::LogRoot& root, 
-					openpal::ILowerLayer& lower,
+					ILowerLayer& lower,
 					ISOEHandler& SOEHandler,					
 					opendnp3::IMasterApplication& application,
 					const MasterParams& params,
@@ -52,7 +54,7 @@ class MasterContext : public ICommandProcessor, public IFunctionProcessor, publi
 	
 	openpal::Logger logger;
 	openpal::IExecutor* pExecutor;
-	openpal::ILowerLayer* pLower;
+	ILowerLayer* pLower;
 
 	// ------- configuration --------
 	MasterParams params;
@@ -70,9 +72,11 @@ class MasterContext : public ICommandProcessor, public IFunctionProcessor, publi
 	openpal::ITimer* pResponseTimer;
 	MasterTasks staticTasks;
 	MasterScheduler scheduler;
-	openpal::StaticQueue<APDUHeader, uint8_t, 4> confirmQueue;
 
-	openpal::StaticBuffer<sizes::MAX_TX_APDU_SIZE> txBuffer;
+	std::deque<APDUHeader> confirmQueue;
+	
+
+	openpal::DynamicBuffer txBuffer;
 	
 	void PostCheckForTask();
 
@@ -125,7 +129,7 @@ class MasterContext : public ICommandProcessor, public IFunctionProcessor, publi
 	// callback from the scheduler that a task is ready to run	
 	virtual void OnPendingTask() override final;
 
-	bool QueueUserTask(const openpal::Function0<IMasterTask*>& action);
+	void QueueUserTask(const openpal::Function0<IMasterTask*>& action);
 
 	void OnResponseTimeout();
 
@@ -159,10 +163,7 @@ void MasterContext::SelectAndOperateT(const T& command, uint16_t index, ICommand
 			return pCommandTask;
 		};
 
-		if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
-		{
-			callback.OnComplete(CommandResponse(CommandResult::QUEUE_FULL));
-		}
+		QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask));
 	}
 	else
 	{
@@ -186,10 +187,7 @@ void MasterContext::DirectOperateT(const T& command, uint16_t index, ICommandCal
 			return pCommandTask;
 		};
 
-		if (!QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask)))
-		{
-			callback.OnComplete(CommandResponse(CommandResult::QUEUE_FULL));
-		}
+		QueueUserTask(openpal::Function0<IMasterTask*>::Bind(userTask));
 	}
 	else
 	{

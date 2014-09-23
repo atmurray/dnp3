@@ -32,7 +32,6 @@
 #include <openpal/logging/Logger.h>
 #include <openpal/Configure.h>
 #include <openpal/container/StaticArray.h>
-#include <openpal/container/StaticQueue.h>
 #include <openpal/container/Pair.h>
 #include <assert.h>
 
