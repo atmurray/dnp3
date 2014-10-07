@@ -50,10 +50,10 @@ static const uint16_t MAX_READ_REQUESTS = 8;
 static const uint32_t MAX_OBJECTS_PER_APDU = 32768;
 
 // the maximum number of queued commands for a master
-static const uint8_t MAX_MASTER_POLL_TASKS = 8;
+static const uint8_t MAX_MASTER_POLL_TASKS = 255;
 
 // the maximum number of queued users tasks like commands
-static const uint8_t MAX_MASTER_USERS_TASKS = 8;
+static const uint8_t MAX_MASTER_USERS_TASKS = 255;
 
 /// The miniumum allowed size for rx and tx APDUs
 static const uint32_t MIN_APDU_SIZE = 20;
@@ -68,7 +68,7 @@ static const uint32_t MAX_RX_APDU_SIZE = OPENDNP3_MAX_RX_APDU_SIZE;
 static const uint32_t DEFAULT_APDU_BUFFER_SIZE = MAX_TX_APDU_SIZE;
 
 // The maximum number of stacks that can associate to a link layer router
-static const uint16_t MAX_STACKS_PER_CHANNEL = 16;
+static const uint16_t MAX_STACKS_PER_CHANNEL = 8 * 1024;
 
 // default sizing is big enough to receive a full APDU with full LPDU's
 static const uint32_t LINK_RECEIVER_BUFFER_SIZE = MACRO_NUM_LINK_FRAMES(MAX_RX_APDU_SIZE) * 292;

@@ -178,8 +178,16 @@ IMaster* DNP3Channel::_AddMaster(char const* id,
 		auto onShutdown = [this, pMaster](){ this->OnShutdown(pMaster); };
 		pMaster->SetShutdownAction(Action0::Bind(onShutdown));
 		pMaster->SetLinkRouter(&router);
-		stacks.insert(pMaster);
-		router.AddContext(pMaster->GetLinkContext(), route);
+		if (router.AddContext(pMaster->GetLinkContext(), route))
+		{
+			stacks.insert(pMaster);
+			return pMaster;
+		}
+		else
+		{
+			FORMAT_LOG_BLOCK(logger, flags::ERR, "Adding link route failed: %i -> %i", route.remote, route.local);
+			return nullptr;
+		}
 		return pMaster;
 	}
 }
@@ -202,9 +210,16 @@ IOutstation* DNP3Channel::_AddOutstation(char const* id,
 		auto onShutdown = [this, pOutstation](){ this->OnShutdown(pOutstation); };
 		pOutstation->SetShutdownAction(Action0::Bind(onShutdown));
 		pOutstation->SetLinkRouter(&router);
-		stacks.insert(pOutstation);
-		router.AddContext(pOutstation->GetLinkContext(), route);
-		return pOutstation;
+		if (router.AddContext(pOutstation->GetLinkContext(), route))
+		{
+			stacks.insert(pOutstation);
+			return pOutstation;
+		}
+		else
+		{
+			FORMAT_LOG_BLOCK(logger, flags::ERR, "Adding link route failed: %i -> %i", route.remote, route.local);
+			return nullptr;
+		}
 	}
 }
 

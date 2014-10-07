@@ -127,6 +127,8 @@
     <ClInclude Include="src\opendnp3\link\SecLinkLayerStates.h" />
     <ClInclude Include="src\opendnp3\link\ShiftableBuffer.h" />
     <ClInclude Include="src\opendnp3\LogLevels.h" />
+    <ClInclude Include="src\opendnp3\master\AssignClassTask.h" />
+    <ClInclude Include="src\opendnp3\master\CallbackTaskBase.h" />
     <ClInclude Include="src\opendnp3\master\ClearRestartTask.h" />
     <ClInclude Include="src\opendnp3\master\CommandMarshaller.h" />
     <ClInclude Include="src\opendnp3\master\CommandResponse.h" />
@@ -135,8 +137,11 @@
     <ClInclude Include="src\opendnp3\master\ConstantCommandProcessor.h" />
     <ClInclude Include="src\opendnp3\master\DisableUnsolicitedTask.h" />
     <ClInclude Include="src\opendnp3\master\EnableUnsolicitedTask.h" />
+    <ClInclude Include="src\opendnp3\master\FreezeTask.h" />
+    <ClInclude Include="src\opendnp3\master\FunctionMarshaller.h" />
     <ClInclude Include="src\opendnp3\master\ICommandCallback.h" />
     <ClInclude Include="src\opendnp3\master\ICommandProcessor.h" />
+    <ClInclude Include="src\opendnp3\master\IFunctionProcessor.h" />
     <ClInclude Include="src\opendnp3\master\IMasterApplication.h" />
     <ClInclude Include="src\opendnp3\master\IMasterScheduler.h" />
     <ClInclude Include="src\opendnp3\master\IMasterState.h" />
@@ -303,6 +308,8 @@
     <ClCompile Include="src\opendnp3\link\PriLinkLayerStates.cpp" />
     <ClCompile Include="src\opendnp3\link\SecLinkLayerStates.cpp" />
     <ClCompile Include="src\opendnp3\link\ShiftableBuffer.cpp" />
+    <ClCompile Include="src\opendnp3\master\AssignClassTask.cpp" />
+    <ClCompile Include="src\opendnp3\master\CallbackTaskBase.cpp" />
     <ClCompile Include="src\opendnp3\master\ClearRestartTask.cpp" />
     <ClCompile Include="src\opendnp3\master\CommandMarshaller.cpp" />
     <ClCompile Include="src\opendnp3\master\CommandResponse.cpp" />
@@ -310,6 +317,8 @@
     <ClCompile Include="src\opendnp3\master\ConstantCommandProcessor.cpp" />
     <ClCompile Include="src\opendnp3\master\DisableUnsolicitedTask.cpp" />
     <ClCompile Include="src\opendnp3\master\EnableUnsolicitedTask.cpp" />
+    <ClCompile Include="src\opendnp3\master\FreezeTask.cpp" />
+    <ClCompile Include="src\opendnp3\master\FunctionMarshaller.cpp" />
     <ClCompile Include="src\opendnp3\master\IMasterState.cpp" />
     <ClCompile Include="src\opendnp3\master\ITaskLock.cpp" />
     <ClCompile Include="src\opendnp3\master\NullResponseTask.cpp" />

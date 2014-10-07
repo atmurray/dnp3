@@ -82,14 +82,22 @@ bool LinkLayerRouter::AddContext(ILinkContext* pContext, const LinkRoute& route)
 
 		if (pNode)
 		{
-			SIMPLE_LOG_BLOCK(logger, flags::ERR, "Context cannot be bound 2x");
+			SIMPLE_LOG_BLOCK(logger, flags::ERR, "Context cannot be bound - stack route already in use on channel");
 			return false;
 		}
 		else
 		{
 			// record is always disabled by default
 			Record(pContext, route);
-			return records.Add(Record(pContext, route));
+			if (records.Add(Record(pContext, route)))
+			{
+				return true;
+			}
+			else
+			{
+				SIMPLE_LOG_BLOCK(logger, flags::ERR, "Context cannot be bound - maximum number of stacks on channel");
+				return false;
+			}
 		}
 	}
 }
@@ -214,7 +222,7 @@ ILinkContext* LinkLayerRouter::GetDestination(uint16_t aDest, uint16_t aSrc)
 
 void LinkLayerRouter::Ack(bool aIsMaster, bool aIsRcvBuffFull, uint16_t aDest, uint16_t aSrc)
 {
-	ILinkContext* pDest = GetDestination(aDest, aSrc);
+		ILinkContext* pDest = GetDestination(aDest, aSrc);
 	if(pDest) pDest->Ack(aIsMaster, aIsRcvBuffFull, aDest, aSrc);
 }
 void LinkLayerRouter::Nack(bool aIsMaster, bool aIsRcvBuffFull, uint16_t aDest, uint16_t aSrc)
@@ -254,7 +262,7 @@ void LinkLayerRouter::ConfirmedUserData(bool aIsMaster, bool aFcb, uint16_t aDes
 }
 void LinkLayerRouter::UnconfirmedUserData(bool aIsMaster, uint16_t aDest, uint16_t aSrc, const ReadOnlyBuffer& arBuffer)
 {
-	ILinkContext* pDest = GetDestination(aDest, aSrc);
+            ILinkContext* pDest = GetDestination(aDest, aSrc);
 	if(pDest) pDest->UnconfirmedUserData(aIsMaster, aDest, aSrc, arBuffer);
 }
 
