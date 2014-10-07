@@ -117,6 +117,8 @@ cpp/libs/opendnp3/src/opendnp3/link/PhysicalLayerMonitorStates.cpp \
 cpp/libs/opendnp3/src/opendnp3/link/PriLinkLayerStates.cpp \
 cpp/libs/opendnp3/src/opendnp3/link/SecLinkLayerStates.cpp \
 cpp/libs/opendnp3/src/opendnp3/link/ShiftableBuffer.cpp \
+cpp/libs/opendnp3/src/opendnp3/master/AssignClassTask.cpp \
+cpp/libs/opendnp3/src/opendnp3/master/CallbackTaskBase.cpp \
 cpp/libs/opendnp3/src/opendnp3/master/ClearRestartTask.cpp \
 cpp/libs/opendnp3/src/opendnp3/master/CommandMarshaller.cpp \
 cpp/libs/opendnp3/src/opendnp3/master/CommandResponse.cpp \
@@ -124,6 +126,8 @@ cpp/libs/opendnp3/src/opendnp3/master/CommandTask.cpp \
 cpp/libs/opendnp3/src/opendnp3/master/ConstantCommandProcessor.cpp \
 cpp/libs/opendnp3/src/opendnp3/master/DisableUnsolicitedTask.cpp \
 cpp/libs/opendnp3/src/opendnp3/master/EnableUnsolicitedTask.cpp \
+cpp/libs/opendnp3/src/opendnp3/master/FreezeTask.cpp \
+cpp/libs/opendnp3/src/opendnp3/master/FunctionMarshaller.cpp \
 cpp/libs/opendnp3/src/opendnp3/master/IMasterState.cpp \
 cpp/libs/opendnp3/src/opendnp3/master/ISOEHandler.cpp \
 cpp/libs/opendnp3/src/opendnp3/master/ITaskLock.cpp \
